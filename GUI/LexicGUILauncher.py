@@ -58,6 +58,13 @@ class mainWindow (Gtk.Window):
         Gtk.Window.__init__(self, title="LexicGUITest")
         self.set_keep_above(True)
         self.set_decorated(False)
+        self.menu = Gtk.Menu()
+        self.menu_items = Gtk.MenuItem("lel")
+        self.menu.append(self.menu_items)
+        self.menu_items.show()
+        self.menu_bar = Gtk.MenuBar()
+        self.root_menu = Gtk.MenuItem("Root Menu")
+        self.root_menu.set_submenu(self.menu)
 
         #Create vertical box that the buttons will be placed in
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
