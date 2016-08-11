@@ -4,7 +4,7 @@
 import sys
 import gi
 gi.require_version("Gtk","3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, Atk
 #Import the predictor
 #Next line changes the python import focus
 sys.path.insert(0, "../Predictor/")
@@ -104,10 +104,8 @@ class mainWindow (Gtk.Window):
 
         #Add textField, and add it to the box
         self.searchField = Gtk.Entry()
-<<<<<<< HEAD
         self.searchField.connect("key-release-event", enter_check)
-=======
->>>>>>> upstream/master
+
         self.topBox.pack_start(self.searchField, True, True, 0)
         self.searchField.set_text("is")
 
@@ -133,11 +131,7 @@ createButtons(buttonAmount)
 win.show_all()
 
 #Start the predictor
-<<<<<<< HEAD
 Predictor.initiateDB("MarkovComplete.db")
-=======
-Predictor.initiateDB("/home/benjadahl/Documents/MarkovComplete.db")
->>>>>>> upstream/master
 
 #Executes the main function of Gtk
 Gtk.main()
