@@ -4,13 +4,14 @@
 import sys
 import gi
 gi.require_version("Gtk","3.0")
-from gi.repository import Gtk, Atk
+from gi.repository import Gtk
+import pyxhook3
 #Import the predictor
 #Next line changes the python import focus
 sys.path.insert(0, "../Predictor/")
 import Predictor
 
-
+currentWord = ""
 #Functions |---
 
 #Function for creating the buttons
@@ -133,5 +134,28 @@ win.show_all()
 #Start the predictor
 Predictor.initiateDB("MarkovComplete.db")
 
+def kbevent( event ):
+    #print key info
+    global currentWord
+    print(event)
+    if event.Ascii != 0 and event.Ascii != 32:
+        currentWord = currentWord + event.Key
+        print (currentWord)
+        #getConvertUp(currentWord)
+
+
+#---Setup keyboardhook---
+#Create hookmanager
+hookman = pyxhook3.HookManager()
+#Define our callback to fire when a key is pressed down
+hookman.KeyDown = kbevent
+#Hook the keyboard
+hookman.HookKeyboard()
+#Start our listener
+hookman.start()
+
 #Executes the main function of Gtk
 Gtk.main()
+
+#Close the keyboardhook
+hookman.cancel()
