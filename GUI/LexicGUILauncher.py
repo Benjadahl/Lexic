@@ -2,6 +2,8 @@
 
 #Import dependencies
 import sys
+import time
+import threading
 import gi
 gi.require_version("Gtk","3.0")
 from gi.repository import Gtk
@@ -11,7 +13,6 @@ import pyxhook3
 sys.path.insert(0, "../Predictor/")
 import Predictor
 
-currentWord = ""
 #Functions |---
 
 #Function for creating the buttons
@@ -64,6 +65,8 @@ def on_prediction_click(widget, sn):
 
 def on_search_click(widget, searchTerm):
     #Updates the userchoices arcoding to the searchterm in the text input field
+    if win.searchField.get_text() == "is":
+        print("lel")
     getConvertUp(win.searchField.get_text())
 
 def enter_check(widget, key):
@@ -120,6 +123,7 @@ class mainWindow (Gtk.Window):
         self.box.pack_start(self.label, True, True, 0)
 
 
+
 win = mainWindow()
 
 #Connect the closing of the main window, to ending the script with Gtk.main_quit
@@ -134,15 +138,15 @@ win.show_all()
 #Start the predictor
 Predictor.initiateDB("MarkovComplete.db")
 
+currentWord = ""
+
 def kbevent( event ):
     #print key info
     global currentWord
     print(event)
     if event.Ascii != 0 and event.Ascii != 32:
-        currentWord = currentWord + event.Key
+        currentWord = currentWord + str(event.Key)
         print (currentWord)
-        #getConvertUp(currentWord)
-
 
 #---Setup keyboardhook---
 #Create hookmanager
@@ -154,8 +158,23 @@ hookman.HookKeyboard()
 #Start our listener
 hookman.start()
 
+#Update field loop
+def updateField():
+    print("dankman")
+    try:
+        win.searchField.set_text(currentWord)
+        getConvertUp(currentWord)
+    except:
+        print("nope")
+    time.sleep(2)
+    updateField()
+
+t = threading.Thread(target=updateField)
+#t.start()
+
 #Executes the main function of Gtk
 Gtk.main()
+
 
 #Close the keyboardhook
 hookman.cancel()
