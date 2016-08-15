@@ -7,6 +7,7 @@ import threading
 import gi
 gi.require_version("Gtk","3.0")
 from gi.repository import Gtk
+from gi.repository import Gdk
 import pyxhook3
 #Import the predictor
 #Next line changes the python import focus
@@ -160,17 +161,21 @@ hookman.start()
 
 #Update field loop
 def updateField():
-    print("dankman")
-    try:
-        win.searchField.set_text(currentWord)
-        getConvertUp(currentWord)
-    except:
-        print("nope")
-    time.sleep(2)
-    updateField()
+    while True:
+        print("dankman")
+        try:
+            Gdk.threads_enter()
+            win.searchField.set_text(currentWord)
+            getConvertUp(currentWord)
+            Gdk.threads_leave()
+        except:
+            print("nope")
+        time.sleep(0.5)
 
 t = threading.Thread(target=updateField)
-#t.start()
+t.start()
+
+Gdk.threads_init()
 
 #Executes the main function of Gtk
 Gtk.main()
